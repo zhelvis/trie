@@ -1,4 +1,6 @@
-# Trie TS Implementation
+# Trie
+
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/zhelvis/trie/node.js.yml)
 
 This project is a TypeScript implementation of the Trie data structure.
 
