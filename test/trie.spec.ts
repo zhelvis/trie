@@ -1,5 +1,6 @@
 import { Trie } from "../src/trie";
 import { TrieNode } from "../src/trie-node";
+import { createRandomStringArray } from "../helpers/array";
 
 describe("Trie", () => {
   let trie: Trie;
@@ -53,15 +54,13 @@ describe("Trie", () => {
     it("shold restore data from buffer", () => {
       const trie = new Trie();
 
-      for (let i = 0; i < 100; i++) {
-        trie.insert((Math.random() + 1).toString(36).substring(7));
-      }
+      createRandomStringArray(100).forEach((word) => {
+        trie.insert(word);
+      });
 
       const serialized = trie.serialize();
 
       const deserialized = Trie.deserialize(serialized);
-
-      console.log(trie);
 
       expect(deserialized).toEqual(trie);
     });
