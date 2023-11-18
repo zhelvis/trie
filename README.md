@@ -45,6 +45,8 @@ let trie = new Trie();
 trie.insert("word");
 console.log(trie.search("word")); // returns true
 console.log(trie.startsWith("wo")); // returns true
+const serialized = trie.serialize(); // serializes the trie into an ArrayBuffer
+console.log(Trie.deserialize(serialized)); // returns restored Trie instance
 ```
 
 ## License

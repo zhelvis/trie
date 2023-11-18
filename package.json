@@ -27,7 +27,10 @@
     "typescript": "^5.2.2"
   },
   "lint-staged": {
-    "*.ts": ["eslint", "prettier --write"],
+    "*.ts": [
+      "eslint",
+      "prettier --write"
+    ],
     "*.md": "prettier --write"
   }
 }

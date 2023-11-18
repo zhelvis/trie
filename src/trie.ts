@@ -70,4 +70,28 @@ export class Trie {
     }
     return true;
   }
+
+  /**
+   * Serializes the trie into an ArrayBuffer.
+   *
+   * @returns The serialized trie as an ArrayBuffer.
+   */
+  public serialize(): ArrayBuffer {
+    const byteLenght = this.root.getSerializedSize();
+    const buffer = new ArrayBuffer(byteLenght);
+    this.root.serialize(buffer);
+    return buffer;
+  }
+
+  /**
+   * Deserialize a Trie from an ArrayBuffer.
+   *
+   * @param arrayBuffer - The ArrayBuffer containing the serialized Trie.
+   * @returns The deserialized Trie.
+   */
+  public static deserialize(arrayBuffer: ArrayBuffer): Trie {
+    const trie = new Trie();
+    trie.root = TrieNode.deserialize(arrayBuffer);
+    return trie;
+  }
 }

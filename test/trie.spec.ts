@@ -48,4 +48,22 @@ describe("Trie", () => {
       expect(trie.startsWith("wor")).toBe(false);
     });
   });
+
+  describe("binary serialization and deserealization", () => {
+    it("shold restore data from buffer", () => {
+      const trie = new Trie();
+
+      for (let i = 0; i < 100; i++) {
+        trie.insert((Math.random() + 1).toString(36).substring(7));
+      }
+
+      const serialized = trie.serialize();
+
+      const deserialized = Trie.deserialize(serialized);
+
+      console.log(trie);
+
+      expect(deserialized).toEqual(trie);
+    });
+  });
 });
