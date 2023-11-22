@@ -49,6 +49,80 @@ const serialized = trie.serialize(); // serializes the trie into an ArrayBuffer
 console.log(Trie.deserialize(serialized)); // returns restored Trie instance
 ```
 
+## Benchmarks
+
+This project includes benchmarks to measure the performance of the Trie data structure.
+
+All methods except `insert` are tested on random data sets of different sizes.
+
+To run the benchmarks, execute the following command in the project directory:
+
+```
+npx ts-node benchmark/<method name>
+```
+
+### Results
+
+System:
+
+```
+OS: Win 10
+CPU: Intel Core i5-11400H 2.70GHz
+RAM: 8GB
+```
+
+#### insert
+
+10,000 rounds.
+
+```
+Average time (ms): 0.000233
+```
+
+#### search
+
+10,000 rounds.
+
+| Size   | Average time (ms) |
+| ------ | ----------------- |
+| 100    | 0.000378          |
+| 1000   | 0.000598          |
+| 10000  | 0.002320          |
+| 100000 | 0.004419          |
+
+#### startsWith
+
+10,000 rounds.
+
+| Size   | Average time (ms) |
+| ------ | ----------------- |
+| 100    | 0.000388          |
+| 1000   | 0.000348          |
+| 10000  | 0.001058          |
+| 100000 | 0.002420          |
+
+#### serialize
+
+10 rounds.
+
+| Size   | Average time (ms) |
+| ------ | ----------------- |
+| 100    | 1.532190          |
+| 1000   | 7.899330          |
+| 10000  | 116.867480        |
+| 100000 | 2408.721850       |
+
+#### deserialize
+
+10 rounds.
+
+| Size   | Average time (ms) |
+| ------ | ----------------- |
+| 100    | 0.531070          |
+| 1000   | 2.311559          |
+| 10000  | 39.265900         |
+| 100000 | 724.546470        |
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.

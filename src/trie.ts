@@ -94,4 +94,20 @@ export class Trie {
     trie.root = TrieNode.deserialize(arrayBuffer);
     return trie;
   }
+
+  /**
+   * Creates a new Trie instance and inserts the given data into it.
+   *
+   * @param data An array of strings to be inserted into the Trie.
+   * @returns A new Trie instance with the inserted data.
+   */
+  public static create(data: string[]) {
+    const trie = new Trie();
+
+    data.forEach((word) => {
+      trie.insert(word);
+    });
+
+    return trie;
+  }
 }
