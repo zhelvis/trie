@@ -50,6 +50,18 @@ describe("Trie", () => {
     });
   });
 
+  describe("create", () => {
+    it("should create a new Trie instance and insert the given data into it", () => {
+      const data = createRandomStringArray(100);
+
+      const trie = Trie.create(data);
+
+      data.forEach((word) => {
+        expect(trie.search(word)).toBe(true);
+      });
+    });
+  });
+
   describe("binary serialization and deserealization", () => {
     it("shold restore data from buffer", () => {
       const trie = new Trie();
