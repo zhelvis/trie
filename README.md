@@ -67,6 +67,7 @@ System:
 
 ```
 OS: Win 10
+ENV: NodeJS v20.3.0
 CPU: Intel Core i5-11400H 2.70GHz
 RAM: 8GB
 ```
