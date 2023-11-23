@@ -35,11 +35,8 @@ export class TrieNode {
   }
 
   /**
-   * Serializes the TrieNode into an ArrayBuffer.
-   *
-   * @param buffer - The buffer to serialize the TrieNode into.
-   * @param byteOffset - The byte offset in the buffer to start serializing from. Defaults to 0.
-   * @param byteLength - The maximum number of bytes to serialize. If not specified, the entire buffer will be used.
+   * Serializes the TrieNode object into a StaticDataView.
+   * @param view The StaticDataView object to serialize into.
    */
   public serialize(view: StaticDataView): void {
     view.setUint32(this.getSerializedSize());
@@ -52,11 +49,9 @@ export class TrieNode {
   }
 
   /**
-   * Deserialize a TrieNode from a binary buffer.
+   * Deserialize a TrieNode from a StaticDataView.
    *
-   * @param buffer - The binary buffer containing the serialized TrieNode.
-   * @param byteOffset - The offset in bytes where the TrieNode starts in the buffer.
-   * @param byteLength - The length in bytes of the TrieNode in the buffer.
+   * @param view - The StaticDataView containing the serialized TrieNode.
    * @returns The deserialized TrieNode.
    */
   public static deserialize(view: StaticDataView): TrieNode {
