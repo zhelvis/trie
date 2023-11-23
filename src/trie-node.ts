@@ -1,3 +1,5 @@
+import { StaticDataView } from "./data-view";
+
 /**
  * Represents a node in a Trie data structure.
  */
@@ -17,14 +19,14 @@ export class TrieNode {
    * @returns The serialized size in number of bytes.
    */
   public getSerializedSize(): number {
+    // Size in bytes
+    let estimated = Uint32Array.BYTES_PER_ELEMENT;
     // isEndOfWord property
-    let estimated = Uint8Array.BYTES_PER_ELEMENT;
+    estimated += Uint8Array.BYTES_PER_ELEMENT;
 
     this.children.forEach((node) => {
       // entry key
       estimated += Uint8Array.BYTES_PER_ELEMENT;
-      // Size in bytes
-      estimated += Uint32Array.BYTES_PER_ELEMENT;
       // entry value
       estimated += node.getSerializedSize();
     });
@@ -39,21 +41,13 @@ export class TrieNode {
    * @param byteOffset - The byte offset in the buffer to start serializing from. Defaults to 0.
    * @param byteLength - The maximum number of bytes to serialize. If not specified, the entire buffer will be used.
    */
-  public serialize(buffer: ArrayBuffer, byteOffset = 0, byteLength?: number): void {
-    // local offset in range from byteOffset to byteOffset + byteLenght
-    let offset = 0;
-    const view = new DataView(buffer, byteOffset, byteLength);
-    view.setUint8(offset, Number(this.isEndOfWord));
-    offset += Uint8Array.BYTES_PER_ELEMENT;
+  public serialize(view: StaticDataView): void {
+    view.setUint32(this.getSerializedSize());
+    view.setUint8(Number(this.isEndOfWord));
 
     this.children.forEach((node, key) => {
-      view.setUint8(offset, key.charCodeAt(0));
-      offset += Uint8Array.BYTES_PER_ELEMENT;
-      const byteLength = node.getSerializedSize();
-      view.setUint32(offset, byteLength);
-      offset += Uint32Array.BYTES_PER_ELEMENT;
-      node.serialize(buffer, byteOffset + offset, byteLength);
-      offset += byteLength;
+      view.setUint8(key.charCodeAt(0));
+      node.serialize(view);
     });
   }
 
@@ -65,22 +59,19 @@ export class TrieNode {
    * @param byteLength - The length in bytes of the TrieNode in the buffer.
    * @returns The deserialized TrieNode.
    */
-  public static deserialize(buffer: ArrayBuffer, byteOffset = 0, byteLength?: number): TrieNode {
-    // local offset in range from byteOffset to byteOffset + byteLenght
-    let offset = 0;
-    const view = new DataView(buffer, byteOffset, byteLength);
-    const node = new TrieNode();
-    node.isEndOfWord = Boolean(view.getUint8(offset));
-    offset += Uint8Array.BYTES_PER_ELEMENT;
+  public static deserialize(view: StaticDataView): TrieNode {
+    // start of the node in buffer
+    const position = view.offset;
+    const byteLenght = view.getUint32();
 
-    while (offset < view.byteLength) {
-      const key = String.fromCharCode(view.getUint8(offset));
-      offset += Uint8Array.BYTES_PER_ELEMENT;
-      const childByteLenght = view.getUint32(offset);
-      offset += Uint32Array.BYTES_PER_ELEMENT;
-      const child = TrieNode.deserialize(buffer, byteOffset + offset, childByteLenght);
+    const node = new TrieNode();
+    node.isEndOfWord = Boolean(view.getUint8());
+
+    while (view.offset < position + byteLenght) {
+      const key = String.fromCharCode(view.getUint8());
+      // TODO: Loop instead of recursion?
+      const child = TrieNode.deserialize(view);
       node.children.set(key, child);
-      offset += childByteLenght;
     }
 
     return node;

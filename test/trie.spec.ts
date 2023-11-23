@@ -63,7 +63,7 @@ describe("Trie", () => {
   });
 
   describe("binary serialization and deserealization", () => {
-    it("shold restore data from buffer", () => {
+    it("should restore data from buffer", () => {
       const trie = new Trie();
 
       createRandomStringArray(100).forEach((word) => {

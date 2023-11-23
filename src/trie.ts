@@ -1,3 +1,4 @@
+import { StaticDataView } from "./data-view";
 import { TrieNode } from "./trie-node";
 
 /**
@@ -79,7 +80,9 @@ export class Trie {
   public serialize(): ArrayBuffer {
     const byteLenght = this.root.getSerializedSize();
     const buffer = new ArrayBuffer(byteLenght);
-    this.root.serialize(buffer);
+    const uint8View = new Uint8Array(buffer);
+    const view = new StaticDataView(uint8View);
+    this.root.serialize(view);
     return buffer;
   }
 
@@ -91,7 +94,9 @@ export class Trie {
    */
   public static deserialize(arrayBuffer: ArrayBuffer): Trie {
     const trie = new Trie();
-    trie.root = TrieNode.deserialize(arrayBuffer);
+    const uint8View = new Uint8Array(arrayBuffer);
+    const view = new StaticDataView(uint8View);
+    trie.root = TrieNode.deserialize(view);
     return trie;
   }
 
