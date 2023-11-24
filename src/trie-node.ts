@@ -52,8 +52,8 @@ export class TrieNode {
    * Deserialize a TrieNode from a StaticDataView.
    * 
    * the serialized structure:
-   *   node size (4 bytes)  isEndOfWord (1 byte)   child ASCII key (1byte)  child node (n bytes)
-   * |--------------------|----------------------|-------------------------|---------------------|...|
+   *   node size (4 bytes)  isEndOfWord (1 byte)   child ASCII key (1 byte)   child node (n bytes)
+   * |--------------------|----------------------|--------------------------|----------------------|...|
    * 
    * The algorithm implements a direct traversal of the tree.
    * 
@@ -61,7 +61,7 @@ export class TrieNode {
    * the parent node based on node size and current position in the {@link StaticDataView}.
    * 
    * TODO (v.zhelvis):
-   * We are currently experiencing performance issues with large volumes of this due to active GC work.
+   * We are currently experiencing performance issues with large volumes of data due to active GC work.
    * 
    * Tried these optimizations:
    * - use loop with stack instead recursion
