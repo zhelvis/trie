@@ -50,21 +50,40 @@ export class TrieNode {
 
   /**
    * Deserialize a TrieNode from a StaticDataView.
+   * 
+   * the serialized structure:
+   *   node size (4 bytes)  isEndOfWord (1 byte)   child ASCII key (1byte)  child node (n bytes)
+   * |--------------------|----------------------|-------------------------|---------------------|...|
+   * 
+   * The algorithm implements a direct traversal of the tree.
+   * 
+   * We determine how to go to the child node and return to
+   * the parent node based on node size and current position in the {@link StaticDataView}.
+   * 
+   * TODO (v.zhelvis):
+   * We are currently experiencing performance issues with large volumes of this due to active GC work.
+   * 
+   * Tried these optimizations:
+   * - use loop with stack instead recursion
+   * - store node sized with dynamic size of bytes (1 byte for number size + n bytes for number)
+   * 
+   * What else can be tried:
+   * - uint24 for sizes
+   * - store node sized in separate typed array
+   * - use radix tree structure for serialized data (compress leaves 'a -> b -> c' to 'abc' node)
+   * - use custom decoder for node keys
    *
    * @param view - The StaticDataView containing the serialized TrieNode.
    * @returns The deserialized TrieNode.
    */
   public static deserialize(view: StaticDataView): TrieNode {
-    // start of the node in buffer
-    const position = view.offset;
-    const byteLenght = view.getUint32();
+    const end = view.offset + view.getUint32();
 
     const node = new TrieNode();
     node.isEndOfWord = Boolean(view.getUint8());
 
-    while (view.offset < position + byteLenght) {
+    while (view.offset < end) {
       const key = String.fromCharCode(view.getUint8());
-      // TODO: Loop instead of recursion?
       const child = TrieNode.deserialize(view);
       node.children.set(key, child);
     }
