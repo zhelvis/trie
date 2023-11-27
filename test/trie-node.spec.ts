@@ -76,15 +76,16 @@ describe("TrieNode", () => {
 
     describe("getSerializedSize", () => {
       it("should return the correct serialized size", () => {
-        expect(node.getSerializedSize()).toBe(view.byteLength);
+        expect(TrieNode.getSerializedSize(node)).toBe(view.byteLength);
       });
     });
 
     describe("serialize", () => {
       it("should return a Uint8Array with the correct serialized data", () => {
-        const buffer = new ArrayBuffer(node.getSerializedSize());
+        const size = TrieNode.getSerializedSize(node);
+        const buffer = new ArrayBuffer(size);
         const uint8View = new Uint8Array(buffer);
-        node.serialize(new StaticDataView(uint8View));
+        TrieNode.serialize(new StaticDataView(uint8View), node, size);
         expect(uint8View).toEqual(view);
       });
     });
