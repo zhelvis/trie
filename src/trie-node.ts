@@ -18,34 +18,43 @@ export class TrieNode {
    * Calculates the serialized size of the TrieNode.
    * @returns The serialized size in number of bytes.
    */
-  public getSerializedSize(): number {
-    // Size in bytes
-    let estimated = Uint32Array.BYTES_PER_ELEMENT;
-    // isEndOfWord property
-    estimated += Uint8Array.BYTES_PER_ELEMENT;
+  public static getSerializedSize(node: TrieNode) {
+    // size in uint32 + isEndOfWord property in uint8
+    let estimated = 0
 
-    this.children.forEach((node) => {
-      // entry key
+    const getNodeSize = (node: TrieNode): number => {
+      estimated += Uint32Array.BYTES_PER_ELEMENT;
       estimated += Uint8Array.BYTES_PER_ELEMENT;
-      // entry value
-      estimated += node.getSerializedSize();
-    });
+      node.children.forEach(getChildEntrySize);
+      return estimated;
+    }
 
-    return estimated;
+    const getChildEntrySize = (child: TrieNode) => {
+      estimated += Uint8Array.BYTES_PER_ELEMENT;
+      getNodeSize(child);
+    }
+
+    return getNodeSize(node);
   }
 
   /**
    * Serializes the TrieNode object into a StaticDataView.
    * @param view The StaticDataView object to serialize into.
    */
-  public serialize(view: StaticDataView): void {
-    view.setUint32(this.getSerializedSize());
-    view.setUint8(Number(this.isEndOfWord));
+  public static serialize(view: StaticDataView, node: TrieNode, byteLength: number) {
+    const serializeNode = (node: TrieNode, size: number): void => {
+      view.setUint32(size);
+      view.setUint8(Number(node.isEndOfWord));
 
-    this.children.forEach((node, key) => {
+      node.children.forEach(serializeChildEntry);
+    }
+
+    const serializeChildEntry = (child: TrieNode, key: string) => {
       view.setUint8(key.charCodeAt(0));
-      node.serialize(view);
-    });
+      serializeNode(child, TrieNode.getSerializedSize(child));
+    }
+
+    return serializeNode(node, byteLength)
   }
 
   /**
