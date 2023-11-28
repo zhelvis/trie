@@ -1,5 +1,3 @@
-import type { TrieNode } from "./trie-node";
-
 export type Bit = 0 | 1;
 
 /**
@@ -7,27 +5,10 @@ export type Bit = 0 | 1;
  * @see https://memoria-framework.dev/docs/data-zoo/louds-tree/
  */
 export class Louds {
-  public bits: Bit[] = [];
+  public bits: Uint8Array;
 
-  /**
-   * Builds the LOUDS (Level-Order Unary Degree Sequence) representation of a trie.
-   *
-   * @param root The root node of the trie.
-   */
-  public build(root: TrieNode): void {
-    this.bits.push(1, 0);
-    const queue: TrieNode[] = [root];
-
-    while (queue.length > 0) {
-      const node = queue.shift()!;
-
-      node.children.forEach((child) => {
-        this.bits.push(1);
-        queue.push(child);
-      });
-
-      this.bits.push(0);
-    }
+  constructor(bits: Uint8Array) {
+    this.bits = bits;
   }
 
   /**
@@ -152,31 +133,5 @@ export class Louds {
    */
   public isNode(position: number): boolean {
     return this.bits[position] === 1;
-  }
-
-  /**
-   * Calculates the serialized size of a trie starting from the given root node.
-   * The serialized size includes the size of the fake node and all the nodes and children in the trie.
-   *
-   * @param root The root node of the trie.
-   * @returns The estimated serialized size of the trie in bytes.
-   */
-  public static getSerializedSize(root: TrieNode): number {
-    let estimated = 2; // 2 bytes for fake node
-
-    const stack: TrieNode[] = [root];
-
-    while (stack.length > 0) {
-      const node = stack.pop()!;
-
-      estimated += 1; // 1 byte for the node
-
-      node.children.forEach((child) => {
-        estimated += 1; // 1 byte for the child
-        stack.push(child);
-      });
-    }
-
-    return estimated;
   }
 }

@@ -78,11 +78,11 @@ export class Trie {
    * @returns The serialized trie as an ArrayBuffer.
    */
   public serialize(): ArrayBuffer {
-    const byteLength = TrieNode.getSerializedSize(this.root);
-    const buffer = new ArrayBuffer(byteLength);
+    const { size, labels, metadata } = TrieNode.getSerializedSize(this.root);
+    const buffer = new ArrayBuffer(size + metadata + labels * 2);
     const uint8View = new Uint8Array(buffer);
     const view = new StaticDataView(uint8View);
-    TrieNode.serialize(view, this.root, byteLength);
+    TrieNode.serialize(view, this.root, size, labels);
     return buffer;
   }
 

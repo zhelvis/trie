@@ -41,28 +41,18 @@ describe("TrieNode", () => {
 
     function createTrieDataView(): Uint8Array {
       return new Uint8Array([
-        // size of root
-        0, 0, 0, 23,
-        // root.isEndOfWord
+        // size
+        0, 0, 0, 9,
+        // labels
+        0, 0, 0, 3,
+        // louds
+        1, 0, 1, 1, 
+        0, 1, 0, 0,
         0,
-        // "a"
-        97,
-        // size of child1
-        0, 0, 0, 11,
-        // child1.isEndOfWord
-        0,
-        // "b"
-        98,
-        // size of grandChild
-        0, 0, 0, 5,
-        // grandChild.isEndOfWord
-        1,
-        // "c"
-        99,
-        // size of child2
-        0, 0, 0, 5,
-        // child2.isEndOfWord
-        1,
+        // keys
+        97, 99, 98,
+        // eow
+        0, 1, 1
       ]);
     }
 
@@ -76,16 +66,20 @@ describe("TrieNode", () => {
 
     describe("getSerializedSize", () => {
       it("should return the correct serialized size", () => {
-        expect(TrieNode.getSerializedSize(node)).toBe(view.byteLength);
+        expect(TrieNode.getSerializedSize(node)).toEqual({
+          labels: 3, 
+          metadata: 8, 
+          size: 9
+        });
       });
     });
 
     describe("serialize", () => {
       it("should return a Uint8Array with the correct serialized data", () => {
-        const size = TrieNode.getSerializedSize(node);
-        const buffer = new ArrayBuffer(size);
+        const { size, labels, metadata } = TrieNode.getSerializedSize(node);
+        const buffer = new ArrayBuffer(size + metadata + labels * 2);
         const uint8View = new Uint8Array(buffer);
-        TrieNode.serialize(new StaticDataView(uint8View), node, size);
+        TrieNode.serialize(new StaticDataView(uint8View), node, size, labels);
         expect(uint8View).toEqual(view);
       });
     });

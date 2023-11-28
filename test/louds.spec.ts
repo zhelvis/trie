@@ -1,33 +1,20 @@
 import { Louds, type Bit } from "../src/louds";
-import { Trie } from "../src/trie";
 
 describe("Louds", () => {
   let louds: Louds;
 
+  const bits = new Uint8Array([
+    1, 0, 1, 1,
+    0, 1, 0, 1,
+    0, 1, 1, 0,
+    1, 0, 1, 0,
+    0, 1, 0, 1,
+    0, 1, 0, 0,
+    0,
+  ]);
+
   beforeEach(() => {
-    louds = new Louds();
-  });
-
-  const data: string[] = ["hello", "world", "hey"];
-
-  // LOUDS bits
-  const bits: Bit[] = [1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0];
-
-  describe("getSerializedSize", () => {
-    it("should return the correct size of the LOUDS structure", () => {
-      const trie = Trie.create(data);
-
-      expect(Louds.getSerializedSize(trie.root)).toBe(bits.length);
-    });
-  });
-
-  describe("build", () => {
-    it("should build the LOUDS structure correctly", () => {
-      const trie = Trie.create(data);
-      louds.build(trie.root);
-
-      expect(louds.bits).toEqual(bits);
-    });
+    louds = new Louds(bits);
   });
 
   describe("navigation methods", () => {

@@ -13,15 +13,15 @@ for (let i = MIN_SIZE_EXPONENT; i <= MAX_SIZE_EXPONENT; i++) {
   const data = createRandomStringArray(size);
   const trie = Trie.create(data);
 
-  const mesurements: number[] = [];
+  const measurements: number[] = [];
 
   for (let j = 0; j < ROUNDS; j++) {
     const start = performance.now();
     trie.serialize();
-    mesurements.push(performance.now() - start);
+    measurements.push(performance.now() - start);
   }
 
-  res[size] = getAverageValue(mesurements);
+  res[size] = getAverageValue(measurements);
 }
 
 console.table(res);
