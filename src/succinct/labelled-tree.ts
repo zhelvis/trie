@@ -127,4 +127,27 @@ export class LabelledTree {
     }
     return true;
   }
+
+  /**
+   * Searches for a word in the labelled trie.
+   * @param word - The word to search for.
+   * @returns True if the word is found, false otherwise.
+   */
+  public search(word: string): boolean {
+    let position = 0;
+    for (let i = 0; i < word.length; i++) {
+      const char = word[i];
+      const node = this.findChild(position, char);
+      if (node === -1) {
+        return false;
+      }
+      position = node;
+    }
+
+    const index = this.louds.getNodeIndex(position);
+
+    return Boolean(this.eow[index - LabelledTree.labelOffset]);
+  }
+
+
 }

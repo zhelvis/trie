@@ -75,4 +75,21 @@ describe("LabelledTree", () => {
       expect(testLabelledTree.startsWith(prefix)).toEqual(expected);
     });
   });
+
+  describe("search", () => {
+    const testWord = "hello";
+
+    const testTrie = Trie.create([testWord]);
+    const testLabelledTree = LabelledTree.create(testTrie.root);
+
+    it.each<[string, boolean]>([
+      [testWord, true],
+      // insert h, he.
+      ...testWord.split("", 2).map<[string, boolean]>((_, i) => [testWord.slice(0, i + 1), false]),
+      // something that definitely isn't in the trie
+      ["world", false],
+    ])("should return '%s' if the trie contains the word '%s'", (word, expected) => {
+      expect(testLabelledTree.search(word)).toEqual(expected);
+    });
+  });
 });
