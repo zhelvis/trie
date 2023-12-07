@@ -6,6 +6,8 @@ This project is a TypeScript implementation of the Trie data structure.
 
 A Trie is a tree-like data structure that is used to store a collection of strings. Each node of the Trie represents a single character of a string and the string is formed by tracing a path from the root to any leaf node. Tries are particularly useful for searching for words in dictionaries, providing auto-suggestions in search engines.
 
+This project also includes a binary implementation of Trie. The BinaryTrie is immutable and can be created from a regular Trie. Once created, it can be restored from buffer saved in a persistent storage. It uses in event-driven workers to restore data without deserialization.
+
 ## Installation
 
 1. Clone the repository
@@ -84,45 +86,34 @@ Average time (ms): 0.000233
 
 10,000 rounds.
 
-| Size   | Average time (ms) |
-| ------ | ----------------- |
-| 100    | 0.000378          |
-| 1000   | 0.000598          |
-| 10000  | 0.002320          |
-| 100000 | 0.004419          |
+| Size   | trie     | binary trie   |
+| ------ | -------- | ------------- |
+| 100    | 0.000565 | 0.000498      |
+| 1000   | 0.001185 | 0.000321      |
+| 10000  | 0.002446 | 0.000481      |
+| 100000 | 0.002749 | 0.000601      |
 
 #### startsWith
 
 10,000 rounds.
 
-| Size   | Average time (ms) |
-| ------ | ----------------- |
-| 100    | 0.000388          |
-| 1000   | 0.000348          |
-| 10000  | 0.001058          |
-| 100000 | 0.002420          |
+| Size   | trie     | binary trie   |
+| ------ | -------- | ------------- |
+| 100    | 0.000339 | 0.000342      |
+| 1000   | 0.000386 | 0.00021       |
+| 10000  | 0.000934 | 0.000359      |
+| 100000 | 0.00136  | 0.000484      |
 
-#### serialize
-
-10 rounds.
-
-| Size   | Average time (ms) |
-| ------ | ----------------- |
-| 100    | 0.784800          |
-| 1000   | 4.834870          |
-| 10000  | 97.991288        |
-| 100000 | 1571.633522       |
-
-#### deserialize
+#### BinaryTrie.create 
 
 10 rounds.
 
-| Size   | Average time (ms) |
-| ------ | ----------------- |
-| 100    | 0.408080          |
-| 1000   | 0.958400          |
-| 10000  | 25.248170         |
-| 100000 | 561.066640        |
+| Size   | time (ms)   | size (B) | original size (B) |
+| ------ | ----------- | -------- | ----------------- |
+| 100    | 1.519195    | 10887    | 1611              |
+| 1000   | 8.897976    | 106577   | 16286             |
+| 10000  | 123.208486  | 1039908  | 164957            |
+| 100000 | 2197.557878 | 10045233 | 1648162           |
 
 ## License
 

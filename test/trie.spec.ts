@@ -61,20 +61,4 @@ describe("Trie", () => {
       });
     });
   });
-
-  describe("binary serialization and deserealization", () => {
-    it("should restore data from buffer", () => {
-      const trie = new Trie();
-
-      createRandomStringArray(100).forEach((word) => {
-        trie.insert(word);
-      });
-
-      const serialized = trie.serialize();
-
-      const deserialized = Trie.deserialize(serialized);
-
-      expect(deserialized).toEqual(trie);
-    });
-  });
 });
