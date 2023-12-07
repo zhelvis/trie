@@ -40,7 +40,7 @@ export class Louds {
   public select(symbol: Bit, occurrence: number): number {
     let count = 0;
 
-    for (let i = 0; i < this.bits.length; i++) {
+    for (let i = 0, n = this.bits.length; i < n; i++) {
       if (this.bits[i] === symbol) {
         count++;
         if (count === occurrence) {
