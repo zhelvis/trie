@@ -19,7 +19,7 @@ export function getRandomElement<T>(array: T[]): T {
  * @returns The average value of the numbers in the array.
  */
 export function getAverageValue(array: number[]): number {
-  return array.reduce((a, b) => a + b, 0) / array.length;
+  return Number((array.reduce((a, b) => a + b, 0) / array.length).toFixed(6));
 }
 
 /**

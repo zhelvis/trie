@@ -1,4 +1,3 @@
-import { StaticDataView } from "./data-view";
 import { TrieNode } from "./trie-node";
 
 /**
@@ -70,34 +69,6 @@ export class Trie {
       current = node;
     }
     return true;
-  }
-
-  /**
-   * Serializes the trie into an ArrayBuffer.
-   *
-   * @returns The serialized trie as an ArrayBuffer.
-   */
-  public serialize(): ArrayBuffer {
-    const { size, labels, metadata } = TrieNode.getSerializedSize(this.root);
-    const buffer = new ArrayBuffer(size + metadata + labels * 2);
-    const uint8View = new Uint8Array(buffer);
-    const view = new StaticDataView(uint8View);
-    TrieNode.serialize(view, this.root, size, labels);
-    return buffer;
-  }
-
-  /**
-   * Deserialize a Trie from an ArrayBuffer.
-   *
-   * @param arrayBuffer - The ArrayBuffer containing the serialized Trie.
-   * @returns The deserialized Trie.
-   */
-  public static deserialize(arrayBuffer: ArrayBuffer): Trie {
-    const trie = new Trie();
-    const uint8View = new Uint8Array(arrayBuffer);
-    const view = new StaticDataView(uint8View);
-    trie.root = TrieNode.deserialize(view);
-    return trie;
   }
 
   /**

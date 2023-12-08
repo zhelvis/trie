@@ -1,4 +1,5 @@
 import { createRandomStringArray, getAverageValue } from "../helpers/array";
+import { BinaryTrie } from "../src/binary-trie";
 import { Trie } from "../src/trie";
 
 const ROUNDS = 10;
@@ -6,7 +7,11 @@ const ROUNDS = 10;
 const MIN_SIZE_EXPONENT = 2;
 const MAX_SIZE_EXPONENT = 5;
 
-const res: { [size: number]: number } = {};
+const res: { [size: number]: {
+  speed: number;
+  mem: number;
+  originalMem: number;
+} } = {};
 
 for (let i = MIN_SIZE_EXPONENT; i <= MAX_SIZE_EXPONENT; i++) {
   const size = 10 ** i;
@@ -17,11 +22,16 @@ for (let i = MIN_SIZE_EXPONENT; i <= MAX_SIZE_EXPONENT; i++) {
 
   for (let j = 0; j < ROUNDS; j++) {
     const start = performance.now();
-    trie.serialize();
+    BinaryTrie.create(trie.root);
     measurements.push(performance.now() - start);
   }
 
-  res[size] = getAverageValue(measurements);
+
+  res[size] = {
+    speed: getAverageValue(measurements),
+    mem: BinaryTrie.create(trie.root).data.length,
+    originalMem: data.join("").length
+  };
 }
 
 console.table(res);
