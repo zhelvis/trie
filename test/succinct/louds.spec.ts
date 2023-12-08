@@ -1,4 +1,4 @@
-import { Louds, type Bit } from "../src/louds";
+import { Louds, type Bit } from "../../src/succinct/louds";
 
 describe("Louds", () => {
   let louds: Louds;
