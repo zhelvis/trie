@@ -7,11 +7,13 @@ const ROUNDS = 10;
 const MIN_SIZE_EXPONENT = 2;
 const MAX_SIZE_EXPONENT = 5;
 
-const res: { [size: number]: {
-  speed: number;
-  mem: number;
-  originalMem: number;
-} } = {};
+const res: {
+  [size: number]: {
+    speed: number;
+    mem: number;
+    originalMem: number;
+  };
+} = {};
 
 for (let i = MIN_SIZE_EXPONENT; i <= MAX_SIZE_EXPONENT; i++) {
   const size = 10 ** i;
@@ -26,11 +28,10 @@ for (let i = MIN_SIZE_EXPONENT; i <= MAX_SIZE_EXPONENT; i++) {
     measurements.push(performance.now() - start);
   }
 
-
   res[size] = {
     speed: getAverageValue(measurements),
     mem: BinaryTrie.create(trie.root).data.length,
-    originalMem: data.join("").length
+    originalMem: data.join("").length,
   };
 }
 

@@ -1,7 +1,7 @@
 import { createRandomStringArray, getAverageValue, getRandomElement } from "../helpers/array";
 import { getRandomString } from "../helpers/string";
 import { BinaryTrie } from "../src/binary-trie";
-import { LabelledTree } from "../src/succinct/labelled-tree"
+import { LabelledTree } from "../src/succinct/labelled-tree";
 import { Trie } from "../src/trie";
 
 const ROUNDS = 10_000;

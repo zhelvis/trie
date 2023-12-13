@@ -25,10 +25,9 @@ describe("LabelledTree", () => {
 
       const tree = LabelledTree.create(root);
 
-
-      expect(tree.louds.buffer).toEqual(new Louds([13, 3]).buffer)
-      expect(tree.keys).toEqual(new Uint8Array([97, 98]))
-      expect(tree.eow).toEqual(new Uint8Array([1, 1]))
+      expect(tree.louds.buffer).toEqual(new Louds([13, 3]).buffer);
+      expect(tree.keys).toEqual(new Uint8Array([97, 98]));
+      expect(tree.eow).toEqual(new Uint8Array([1, 1]));
     });
   });
 

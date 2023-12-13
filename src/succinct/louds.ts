@@ -25,7 +25,6 @@ export class Louds extends RankedBitArray {
     return this.select0(this.rank1(position + 1)) + 1;
   }
 
-
   /**
    * checks if {@link position} in  tree node.
    *

@@ -9,7 +9,7 @@ export class LabelledTree {
   public static readonly labelOffset = 2;
 
   /**
-   * 
+   *
    * @param louds Level Order Unary Degree Sequence (LOUDS).
    * @param keys Keys for each node, except the fake root node.
    * @param eow "End Of Word" flag for each node, except the fake root node.
@@ -17,7 +17,7 @@ export class LabelledTree {
   constructor(
     public louds: Louds,
     public keys: Uint8Array,
-    public eow: Uint8Array
+    public eow: Uint8Array,
   ) {}
 
   public findChild(position: number, key: string): number {
@@ -131,6 +131,4 @@ export class LabelledTree {
 
     return Boolean(this.eow[index - LabelledTree.labelOffset]);
   }
-
-
 }

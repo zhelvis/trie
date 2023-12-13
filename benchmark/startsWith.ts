@@ -35,12 +35,11 @@ for (let i = MIN_SIZE_EXPONENT; i <= MAX_SIZE_EXPONENT; i++) {
     start = performance.now();
     binaryTrie.startsWith(prefix);
     binaryTrieMeasurements.push(performance.now() - start);
-
   }
 
   res[size] = {
     trie: getAverageValue(trieMeasurements),
-    "binary trie": getAverageValue(binaryTrieMeasurements)
+    "binary trie": getAverageValue(binaryTrieMeasurements),
   };
 }
 
