@@ -34,9 +34,8 @@ export class BitArray extends Uint32Array {
     }
 
     public getBitPosition(index: number): BitPosition {
-        const bucket = index >> 5;
-        this.lastPosition.bucket = bucket;
-        this.lastPosition.position = index - (bucket << 5);
+        this.lastPosition.bucket = index >> 5;
+        this.lastPosition.position = index & 31;
         return this.lastPosition;
     }
 

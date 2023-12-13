@@ -4,7 +4,7 @@ import { BinaryTrie } from "../src/binary-trie";
 import { LabelledTree } from "../src/succinct/labelled-tree"
 import { Trie } from "../src/trie";
 
-const ROUNDS = 10;
+const ROUNDS = 10_000;
 
 const MIN_SIZE_EXPONENT = 2;
 const MAX_SIZE_EXPONENT = 5;

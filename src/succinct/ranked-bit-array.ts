@@ -26,7 +26,6 @@ export class RankedBitArray extends BitArray {
         const localRank = popCount32(masked);
         const bucketRank = bucket ? this[(this.length >> 1) + bucket - 1] : 0;
         return bucketRank + localRank;
-
     }
 
     /**
@@ -38,6 +37,7 @@ export class RankedBitArray extends BitArray {
         let left = this.length >> 1;
         let right = this.length - 1;
 
+        // binary search of target bucket
         while (left <= right) {
             const midIndex = (right + left) >> 1;
             const mid = this[midIndex];
@@ -55,18 +55,31 @@ export class RankedBitArray extends BitArray {
 
         const cursor = bucketRankIndex ? bucketRankIndex << 5 : 0;
 
+        // count zeros in previous bucket
         let count = cursor ? Math.abs(cursor - this[left - 1]) : 0;
 
-        for (let i = cursor, n = this.size; i < n; i++) {
-            if (this.getBit(i) === 0) {
+        // count zeros in target bucket
+        let i = cursor;
+        const n = this.size;
+        let result = -1;
+
+        while (i < n && count < index) {
+            const bucket = this[i >> 5];
+            const bitPosition = i & 31;
+            const bit = (bucket >> bitPosition) & 1;
+
+            if (bit === 0) {
                 count++;
                 if (count === index) {
-                    return i;
+                    result = i;
+                    break;
                 }
             }
+
+            i++;
         }
 
-        return -1;
+        return result;
     }
 
     public countBucketRanks() {
