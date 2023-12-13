@@ -9,27 +9,16 @@ export class LabelledTree {
   public static readonly labelOffset = 2;
 
   /**
-   * Level Order Unary Degree Sequence (LOUDS).
-   *
-   * @see https://memoria-framework.dev/docs/data-zoo/louds-tree/
+   * 
+   * @param louds Level Order Unary Degree Sequence (LOUDS).
+   * @param keys Keys for each node, except the fake root node.
+   * @param eow "End Of Word" flag for each node, except the fake root node.
    */
-  private louds: Louds;
-
-  /**
-   * Keys for each node, except the fake root node.
-   */
-  private keys: Uint8Array;
-
-  /**
-   * "End Of Word" flag for each node, except the fake root node.
-   */
-  private eow: Uint8Array;
-
-  constructor(loudsView: Uint8Array, keysView: Uint8Array, eowView: Uint8Array) {
-    this.keys = keysView;
-    this.eow = eowView;
-    this.louds = new Louds(loudsView);
-  }
+  constructor(
+    public louds: Louds,
+    public keys: Uint8Array,
+    public eow: Uint8Array
+  ) {}
 
   public findChild(position: number, key: string): number {
     let childPos = this.louds.firstChild(position);
@@ -48,32 +37,25 @@ export class LabelledTree {
     return -1;
   }
 
-  public getDataView(): Uint8Array {
-    const view = new Uint8Array(this.louds.bits.length + this.keys.length + this.eow.length);
-    view.set(this.louds.bits);
-    view.set(this.keys, this.louds.bits.length);
-    view.set(this.eow, this.louds.bits.length + this.keys.length);
-    return view;
-  }
-
   public static create(root: TrieNode): LabelledTree {
     const { loudsSize, labels } = LabelledTree.getSerializedSize(root);
 
-    const louds = new Uint8Array(loudsSize);
+    const louds = Louds.create(loudsSize);
+
     const keys = new Uint8Array(labels);
     const eow = new Uint8Array(labels);
 
     let loudsCursor = 0;
     let labelsCursor = 0;
 
-    louds[loudsCursor++] = 1;
-    louds[loudsCursor++] = 0;
+    louds.setBit(loudsCursor++);
+    loudsCursor++;
 
     const queue = new Queue<TrieNode>();
     queue.push(root);
 
     const serializeNode = (node: TrieNode, key: string): void => {
-      louds[loudsCursor++] = 1;
+      louds.setBit(loudsCursor++);
       keys[labelsCursor] = key.charCodeAt(0);
       eow[labelsCursor] = Number(node.isEndOfWord);
       labelsCursor += 1;
@@ -83,9 +65,10 @@ export class LabelledTree {
     while (queue.length > 0) {
       const node = queue.shift()!;
       node.children.forEach(serializeNode);
-      louds[loudsCursor++] = 0;
+      loudsCursor++;
     }
 
+    louds.countBucketRanks();
     return new LabelledTree(louds, keys, eow);
   }
 
@@ -97,7 +80,7 @@ export class LabelledTree {
     let labels = 0; // label counter
 
     const getSize = (node: TrieNode) => {
-      loudsSize += 2; // 2 bytes for node
+      loudsSize += 2; // 2 bit for node
       labels += 1;
       node.children.forEach(getSize);
     };

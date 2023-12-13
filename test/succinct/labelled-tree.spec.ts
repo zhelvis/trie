@@ -1,10 +1,9 @@
 import { LabelledTree } from "../../src/succinct/labelled-tree";
+import { Louds } from "../../src/succinct/louds";
 import { Trie } from "../../src/trie";
 import { TrieNode } from "../../src/trie-node";
 
 describe("LabelledTree", () => {
-  const getTestDataView = () => new Uint8Array([1, 0, 1, 1, 0, 0, 0, 97, 98, 1, 1]);
-
   const getTestTrieNode = () => {
     const root = new TrieNode();
 
@@ -20,29 +19,16 @@ describe("LabelledTree", () => {
     return root;
   };
 
-  describe("findChild", () => {
-    const cases: [key: string, expected: number][] = [
-      ["a", 2],
-      ["b", 3],
-      ["c", -1],
-    ];
-
-    const tree = LabelledTree.create(getTestTrieNode());
-
-    it.each(cases)("should return the position of the child node with the given key", (key, expected) => {
-      const childPos = tree.findChild(0, key);
-
-      expect(childPos).toEqual(expected);
-    });
-  });
-
   describe("create", () => {
     it("should create a LabelledTree from a TrieNode", () => {
       const root = getTestTrieNode();
 
-      const createdTree = LabelledTree.create(root);
+      const tree = LabelledTree.create(root);
 
-      expect(createdTree.getDataView()).toEqual(getTestDataView());
+
+      expect(tree.louds.buffer).toEqual(new Louds([13, 3]).buffer)
+      expect(tree.keys).toEqual(new Uint8Array([97, 98]))
+      expect(tree.eow).toEqual(new Uint8Array([1, 1]))
     });
   });
 
@@ -56,6 +42,22 @@ describe("LabelledTree", () => {
         loudsSize: 7,
         labels: 2,
       });
+    });
+  });
+
+  describe("findChild", () => {
+    const cases: [key: string, expected: number][] = [
+      ["a", 2],
+      ["b", 3],
+      ["c", -1],
+    ];
+
+    const tree = LabelledTree.create(getTestTrieNode());
+
+    it.each(cases)("should return the position of the child node with the given key", (key, expected) => {
+      const childPos = tree.findChild(0, key);
+
+      expect(childPos).toEqual(expected);
     });
   });
 
