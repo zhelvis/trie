@@ -1,7 +1,6 @@
 import { Trie } from "../src/trie";
 import { TrieNode } from "../src/trie-node";
 import { createRandomStringArray } from "../helpers/array";
-import { LabelledTree } from "../src/succinct/labelled-tree";
 
 describe("Trie", () => {
   let trie: Trie;
@@ -57,10 +56,8 @@ describe("Trie", () => {
 
       const trie = Trie.create(data);
 
-      const labelledTree = LabelledTree.create(trie.root);
-
       data.forEach((word) => {
-        expect(labelledTree.search(word)).toBe(true);
+        expect(trie.search(word)).toBe(true);
       });
     });
   });
