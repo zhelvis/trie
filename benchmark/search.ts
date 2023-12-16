@@ -1,4 +1,5 @@
-import { createRandomStringArray, getAverageValue, getRandomElement } from "../helpers/array";
+import { DataFrame } from "danfojs-node";
+import { createRandomStringArray, getRandomElement } from "../helpers/array";
 import { getRandomString } from "../helpers/string";
 import { BinaryTrie } from "../src/binary-trie";
 import { LabelledTree } from "../src/succinct/labelled-tree";
@@ -8,8 +9,6 @@ const ROUNDS = 10_000;
 
 const MIN_SIZE_EXPONENT = 2;
 const MAX_SIZE_EXPONENT = 5;
-
-const res: { [size: number]: { [structure: string]: number } } = {};
 
 for (let i = MIN_SIZE_EXPONENT; i <= MAX_SIZE_EXPONENT; i++) {
   const size = 10 ** i;
@@ -28,22 +27,22 @@ for (let i = MIN_SIZE_EXPONENT; i <= MAX_SIZE_EXPONENT; i++) {
 
     let start = performance.now();
     labelledTree.search(word);
-    labelledTreeMeasurements.push(performance.now() - start);
+    labelledTreeMeasurements.push(Number((performance.now() - start).toFixed(6)));
 
     start = performance.now();
     binaryTrie.search(word);
-    binaryTrieMeasurements.push(performance.now() - start);
+    binaryTrieMeasurements.push(Number((performance.now() - start).toFixed(6)));
 
     start = performance.now();
     trie.search(word);
-    trieMeasurements.push(performance.now() - start);
+    trieMeasurements.push(Number((performance.now() - start).toFixed(6)));
   }
 
-  res[size] = {
-    trie: getAverageValue(trieMeasurements),
-    "binary trie": getAverageValue(binaryTrieMeasurements),
-    "labelled tree": getAverageValue(labelledTreeMeasurements),
-  };
-}
+  const df = new DataFrame({
+    "trie": trieMeasurements,
+    "binary trie": binaryTrieMeasurements, 
+    "labelled tree": labelledTreeMeasurements,
+  });
 
-console.table(res);
+  df.describe().print();
+}
