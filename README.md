@@ -47,8 +47,6 @@ let trie = new Trie();
 trie.insert("word");
 console.log(trie.search("word")); // returns true
 console.log(trie.startsWith("wo")); // returns true
-const serialized = trie.serialize(); // serializes the trie into an ArrayBuffer
-console.log(Trie.deserialize(serialized)); // returns restored Trie instance
 ```
 
 ## Benchmarks
@@ -74,7 +72,7 @@ CPU: Intel Core i5-11400H 2.70GHz
 RAM: 8GB
 ```
 
-#### insert
+#### Trie.insert
 
 10,000 rounds.
 
@@ -86,34 +84,40 @@ Average time (ms): 0.000233
 
 10,000 rounds.
 
-| Size   | trie     | binary trie   |
-| ------ | -------- | ------------- |
-| 100    | 0.000565 | 0.000498      |
-| 1000   | 0.001185 | 0.000321      |
-| 10000  | 0.002446 | 0.000481      |
-| 100000 | 0.002749 | 0.000601      |
+Results: average operation time in milliseconds.
+
+| words (n) | avg. op time (ms) |             |               |
+| --------- | ----------------- | ----------- | ------------- |
+|           | trie              | binary trie | labelled tree |
+| 100       | 0.000582          | 0.000452    | 0.010219      |
+| 1000      | 0.003238          | 0.000494    | 0.054442      |
+| 10000     | 0.004381          | 0.000616    | 0.406077      |
+| 100000    | 0.005342          | 0.001159    | 3.671739      |
 
 #### startsWith
 
 10,000 rounds.
 
-| Size   | trie     | binary trie   |
-| ------ | -------- | ------------- |
-| 100    | 0.000339 | 0.000342      |
-| 1000   | 0.000386 | 0.00021       |
-| 10000  | 0.000934 | 0.000359      |
-| 100000 | 0.00136  | 0.000484      |
+| words (n) | avg. op time (ms) |             |               |
+| --------- | ----------------- | ----------- | ------------- |
+|           | trie              | binary trie | labelled tree |
+| 100       | 0.000421          | 0.000338    | 0.005769      |
+| 1000      | 0.001326          | 0.000317    | 0.024084      |
+| 10000     | 0.001875          | 0.000418    | 0.188123      |
+| 100000    | 0.002768          | 0.000684    | 1.625385      |
 
-#### BinaryTrie.create 
+
+#### create
 
 10 rounds.
+| words (n) | original size (kb) | binary trie |             | labelled trie |            |
+| --------- | ------------------ | ----------- | ----------- | ------------- | ---------- |
+|           |                    | size (kb)   | speed (ms)  | size (kb)     | speed (ms) |
+| 100       | 1.61               | 10.91       | 1.139595    | 3.9           | 0.851891   |
+| 1000      | 15.91              | 104.16      | 10.140091   | 37.21         | 2.337883   |
+| 10000     | 161.31             | 1017.29     | 144.604999  | 363.32        | 34.830585  |
+| 100000    | 1612.69            | 9833.27     | 2319.518454 | 3511.89       | 776.859228 |
 
-| Size   | time (ms)   | size (B) | original size (B) |
-| ------ | ----------- | -------- | ----------------- |
-| 100    | 1.519195    | 10887    | 1611              |
-| 1000   | 8.897976    | 106577   | 16286             |
-| 10000  | 123.208486  | 1039908  | 164957            |
-| 100000 | 2197.557878 | 10045233 | 1648162           |
 
 ## License
 
