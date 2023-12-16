@@ -1,5 +1,4 @@
 import { createRandomStringArray, getAverageValue, getRandomElement } from "../helpers/array";
-import { getRandomString } from "../helpers/string";
 import { BinaryTrie } from "../src/binary-trie";
 import { LabelledTree } from "../src/succinct/labelled-tree";
 import { Trie } from "../src/trie";
@@ -13,7 +12,6 @@ const res: { [size: number]: { [structure: string]: number } } = {};
 
 for (let i = MIN_SIZE_EXPONENT; i <= MAX_SIZE_EXPONENT; i++) {
   const size = 10 ** i;
-  console.log(`Running benchmark for ${size} words...`);
   const data = createRandomStringArray(size);
   const trie = Trie.create(data);
   const binaryTrie = BinaryTrie.create(trie.root);
@@ -24,7 +22,7 @@ for (let i = MIN_SIZE_EXPONENT; i <= MAX_SIZE_EXPONENT; i++) {
   const labelledTreeMeasurements: number[] = [];
 
   for (let j = 0; j < ROUNDS; j++) {
-    const word = j % 2 ? getRandomElement(data) : getRandomString();
+    const word =getRandomElement(data);
 
     let start = performance.now();
     labelledTree.search(word);

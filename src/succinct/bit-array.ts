@@ -11,10 +11,6 @@ type BitPosition = {
 export class BitArray extends Uint32Array {
   lastPosition: BitPosition = { bucket: 0, position: 0 };
 
-  static get [Symbol.species](): Uint32ArrayConstructor {
-    return Uint32Array;
-  }
-
   /**
    * The amount of bits in the array.
    */

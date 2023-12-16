@@ -29,7 +29,7 @@ export class RankedBitArray extends BitArray {
 
   /**
    * Returns the select of zeros at the given index.
-   * @param index
+   * @param index The index of element in bit sequence.
    * @returns Zeros select at the given index.
    */
   public select0(index: number): number {
@@ -81,6 +81,9 @@ export class RankedBitArray extends BitArray {
     return result;
   }
 
+  /**
+   * Calculate cumulative rank for every bucket based on bit sequence for fast navigation.
+   */
   public countBucketRanks() {
     let acc = 0;
     for (let i = 0, n = this.length >> 1; i < n; i++) {

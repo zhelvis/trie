@@ -23,15 +23,16 @@ describe("RankedBitArray", () => {
   });
 
   describe("select0", () => {
-    const cases: [occurrence: number, expected: number][] = [
+    const cases: [index: number, expected: number][] = [
       [0, -1],
       [1, 1],
       [2, 4],
       [3, 6],
+      [12, 23],
       [21, 33],
     ];
-    it.each(cases)("should return the correct index of the occurrence-th", (occurrence, expected) => {
-      expect(rankedBitArray.select0(occurrence)).toBe(expected);
+    it.each(cases)("should return the correct position for index %i", (index, expected) => {
+      expect(rankedBitArray.select0(index)).toBe(expected);
     });
   });
 
