@@ -1,3 +1,4 @@
+import { BitArray } from "../../src/succinct/bit-array";
 describe("BitArray", () => {
   let bitArray: BitArray;
 
@@ -30,4 +31,3 @@ describe("BitArray", () => {
     expect(position.position).toBe(0);
   });
 });
-import { BitArray } from "/Volumes/work/trie/src/succinct/bit-array";

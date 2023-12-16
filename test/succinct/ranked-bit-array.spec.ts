@@ -1,4 +1,4 @@
-import { RankedBitArray } from "/Volumes/work/trie/src/succinct/ranked-bit-array";
+import { RankedBitArray } from "../../src/succinct/ranked-bit-array";
 
 describe("RankedBitArray", () => {
   let rankedBitArray: RankedBitArray;
