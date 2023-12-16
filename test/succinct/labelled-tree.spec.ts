@@ -1,3 +1,4 @@
+import { BitArray } from "../../src/succinct/bit-array";
 import { LabelledTree } from "../../src/succinct/labelled-tree";
 import { Louds } from "../../src/succinct/louds";
 import { Trie } from "../../src/trie";
@@ -27,7 +28,7 @@ describe("LabelledTree", () => {
 
       expect(tree.louds.buffer).toEqual(new Louds([13, 3]).buffer);
       expect(tree.keys).toEqual(new Uint8Array([97, 98]));
-      expect(tree.eow).toEqual(new Uint8Array([1, 1]));
+      expect(tree.eow.buffer).toEqual(new BitArray([3]).buffer);
     });
   });
 

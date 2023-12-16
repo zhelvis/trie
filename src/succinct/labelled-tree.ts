@@ -1,5 +1,6 @@
 import { Queue } from "../queue";
 import { TrieNode } from "../trie-node";
+import { type Bit, BitArray } from "./bit-array";
 import { Louds } from "./louds";
 
 export class LabelledTree {
@@ -17,7 +18,7 @@ export class LabelledTree {
   constructor(
     public louds: Louds,
     public keys: Uint8Array,
-    public eow: Uint8Array,
+    public eow: BitArray,
   ) {}
 
   public findChild(position: number, key: string): number {
@@ -43,7 +44,7 @@ export class LabelledTree {
     const louds = Louds.create(loudsSize);
 
     const keys = new Uint8Array(labels);
-    const eow = new Uint8Array(labels);
+    const eow = BitArray.create(labels);
 
     let loudsCursor = 0;
     let labelsCursor = 0;
@@ -57,7 +58,7 @@ export class LabelledTree {
     const serializeNode = (node: TrieNode, key: string): void => {
       louds.setBit(loudsCursor++);
       keys[labelsCursor] = key.charCodeAt(0);
-      eow[labelsCursor] = Number(node.isEndOfWord);
+      eow.setBit(labelsCursor, Number(node.isEndOfWord) as Bit);
       labelsCursor += 1;
       queue.push(node);
     };
@@ -129,6 +130,6 @@ export class LabelledTree {
 
     const index = this.louds.getNodeIndex(position);
 
-    return Boolean(this.eow[index - LabelledTree.labelOffset]);
+    return Boolean(this.eow.getBit(index - LabelledTree.labelOffset));
   }
 }
